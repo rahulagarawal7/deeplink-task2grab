@@ -3,25 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <title>Opening App...</title>
-    <script>
-      // Get ?campaignId=XXXX
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("campaignId");
 
-      // Create the deep link
-      const deepLink = `task2grab://campaigns/${id}`;
+    <script>
+      const params = new URLSearchParams(window.location.search);
+
+      const type = params.get("type");
+      const campaignId = params.get("campaignId");
+
+      let deepLink = "task2grab://home";
+
+      // Priority 1 → campaign
+      if (campaignId) {
+        deepLink = `task2grab://campaigns/${campaignId}`;
+      }
+
+      // Priority 2 → type routes
+      else if (type) {
+        if (type === "wallet") {
+          deepLink = "task2grab://wallet";
+        }
+
+        if (type === "home") {
+          deepLink = "task2grab://home";
+        }
+      }
 
       // Trigger deep link
       window.location.href = deepLink;
 
-      // If app is NOT installed → fallback after 1.5 sec
+      // Fallback if app not installed
       setTimeout(() => {
         window.location.href =
           "https://play.google.com/store/apps/details?id=com.task2grab";
-      }, 1500);
+      }, 1000);
     </script>
   </head>
+
   <body>
-    <p>Opening task2grab app…</p>
+    <p>Opening Task2Grab app…</p>
   </body>
 </html>
